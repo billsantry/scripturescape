@@ -1,6 +1,6 @@
 # ScriptureScape
 
-A Flask app that generates an uplifting Bible verse + commentary paired with a comforting, watercolor-style image to inspire hope.
+A Flask app that generates an uplifting scripture + commentary paired with a comforting, watercolor-style image to inspire hope.
 
 ---
 
