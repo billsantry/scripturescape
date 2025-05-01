@@ -22,6 +22,25 @@ A Flask app that generates an uplifting scripture + commentary paired with a com
 
 ---
 
+## 🎥 Live Demo — ScriptureScape in Action
+
+Below is a short (45-second) walkthrough that shows the complete flow:
+
+1. **Enter a challenge**\
+   The demo types: *“I just lost my job and the bills are piling up.”*
+
+2. **Instant comfort**\
+   ScriptureScape chooses a context-appropriate Bible verse, adds a two-sentence commentary, and paints a calming watercolor landscape—always free of any typography.
+
+3. **Built-in actions**\
+   You’ll see the one-click buttons to **Download**, **Email**, and **Share to social media** right from the results screen.
+
+
+
+> *Tip:* If the video doesn't start, click the play button or open it directly:\
+> [`docs/demo_trimmed.mp4`](docs/demo_trimmed.mp4)
+
+
 ## 🛠️ Setup
 
 1. **📥 Clone the repo**  
