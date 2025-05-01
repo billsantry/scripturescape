@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your ScriptureScape</title>
+</head>
+<body>
+  <h1>Your Verse</h1>
+  <p>{{ verse }}</p>
+  <h2>Commentary</h2>
+  <p>{{ commentary }}</p>
+  <h2>Image</h2>
+  <img src="{{ image_url }}" alt="Generated image"><br>
+  {% if imgur_client_id %}
+    <button id="upload">Upload to Imgur</button>
+  {% endif %}
+  <a href="/">Start Over</a>
+</body>
+</html>
