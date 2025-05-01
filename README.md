@@ -10,7 +10,7 @@ A Flask app that generates an uplifting scripture + commentary paired with a com
 - **Output:**  
   - A relevant Bible verse (less-common, chosen for hope)  
   - A 2–3 sentence uplifting commentary  
-  - A single watercolor-style image illustrating divine providence  
+  - A single inspirational watercolor-style image   
 - **Built‑in Actions:** Download the generated image, email it directly, or post to social media with one click.  
 - **Optional:** One-click Imgur upload (requires `IMGUR_CLIENT_ID`)
 
