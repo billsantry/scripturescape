@@ -1,8 +1,11 @@
 # 📜 ScriptureScape
 
-A Flask app that generates an uplifting scripture + commentary paired with a comforting, watercolor-style image to inspire hope.
+![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-blueviolet)
+
+A Flask app that generates an uplifting scripture + commentary paired with a comforting, watercolor-style image to inspire hope. Powered by the OpenAI API.
 
 ---
+
 
 ## ✨ Features
 
