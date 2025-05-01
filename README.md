@@ -6,7 +6,7 @@ A Flask app that generates an uplifting scripture + commentary paired with a com
 
 ## ✨ Features
 
-- **✍️ Input:** Describe your current challenge in plain language.  
+- **✍️ Input:** Describe your current situational challenge in plain language.  
 - **🎨 Output:**  
   - 📖 A relevant Bible verse   
   - 💬 A 2–3 sentence uplifting commentary  
