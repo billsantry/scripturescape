@@ -38,7 +38,7 @@ Below is a short (45-second) walkthrough that shows the complete flow:
 
 
 > *Tip:* If the video doesn't start, click the play button or open it directly:\
-> [`docs/demo_trimmed.mp4`](docs/demo_trimmed.mp4)
+> [`/demo_trimmed.mp4`](/demo_trimmed.mp4)
 
 
 ## 🛠️ Setup
