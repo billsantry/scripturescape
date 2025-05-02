@@ -22,24 +22,19 @@ A Flask app that generates an uplifting scripture + commentary paired with a com
 
 ---
 
-## 🎥 Live Demo — ScriptureScape in Action
+## 🎞️ Animated Walkthrough — ScriptureScape in Action
 
-Below is a short (45-second) walkthrough that shows the complete flow:
+Below is a quick, silent GIF (≈10 s) that illustrates the full flow:
 
-1. **Enter a challenge**\
-   The demo types: *“I just lost my job and the bills are piling up.”*
+1. **Enter a challenge** – e.g. *“I just lost my job and the bills are piling up.”*
+2. **Instant comfort** – ScriptureScape selects an encouraging verse, adds a brief commentary, and paints a tranquil watercolor landscape.
+3. **Built‑in actions** – One‑click **Download**, **Email**, and **Share** buttons appear on the results screen.
 
-2. **Instant comfort**\
-   ScriptureScape chooses a context-appropriate Bible verse, adds a two-sentence commentary, and paints a calming watercolor landscape—always free of any typography.
+<p align="center">
+  <img src="docs/scripturescape-demo.gif" alt="ScriptureScape animated demo" width="640">
+</p>
 
-3. **Built-in actions**\
-   You’ll see the one-click buttons to **Download**, **Email**, and **Share to social media** right from the results screen.
-
-
-
-> *Tip:* If the video doesn't start, click the play button or open it directly:\
-> [`/demo_trimmed.mp4`](/demo_trimmed.mp4)
-
+---
 
 ## 🛠️ Setup
 
