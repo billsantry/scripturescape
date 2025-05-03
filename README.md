@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📜 ScriptureScape
 
 ![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-blueviolet)
@@ -42,3 +43,57 @@ Below is a quick, silent GIF (≈10 s) that illustrates the full flow:
    ```bash
    git clone https://github.com/yourusername/scripturescape.git
    cd scripturescape
+=======
+# ScriptureScape
+
+A Flask app that generates uplifting Bible verses and watercolor-style images,
+then produces an animated GIF to inspire hope.
+
+## Features
+
+- Input: Describe your current challenge.
+- Output: A relevant Bible verse + commentary, plus a 3-frame animated GIF.
+- Optional one-click Imgur upload (requires IMGUR_CLIENT_ID).
+
+## Setup
+
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/yourusername/scripturescape.git
+   cd scripturescape
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Copy the example env file and fill in your keys:
+   ```bash
+   cp config.env.txt.example config.env.txt
+   ```
+
+5. Run the app:
+   ```bash
+   flask run
+   ```
+
+6. Open http://127.0.0.1:5000 in your browser.
+
+## Packaging & Deployment
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+# Add your GitHub remote:
+git remote add origin git@github.com:yourusername/scripturescape.git
+git push -u origin main
+```
+>>>>>>> Initial commit of ScriptureScape

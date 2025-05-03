@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -172,3 +173,29 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+=======
+# Virtual environment
+venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Config / env files
+config.env.txt
+.env
+*.env
+
+# Flask logs & DB
+*.log
+*.sqlite3
+
+# Generated images & GIFs
+static/raw.png
+static/image.png
+static/frame_*.png
+static/result.gif
+
+# macOS
+.DS_Store
+>>>>>>> Initial commit of ScriptureScape

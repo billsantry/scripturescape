@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 aext-assistant @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_e8wd_39o7u/croot/aext-assistant_1734643594996/work
 aext-assistant-server @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_11co_dx32p/croot/aext-assistant-server_1734640107264/work
 aext-core @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_abh4583law/croot/aext-core_1734637785810/work
@@ -387,3 +388,11 @@ zict @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/zict_1699
 zipp @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/zipp_1707361439201/work
 zope.interface @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/zope.interface_1699251096669/work
 zstandard @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_2bqnms2ngq/croot/zstandard_1728569218033/work
+=======
+Flask>=2.0
+openai>=1.0.0
+python-dotenv>=0.10
+requests>=2.0
+Pillow>=9.0
+MoviePy>=2.0
+>>>>>>> Initial commit of ScriptureScape
