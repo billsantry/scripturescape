@@ -166,7 +166,7 @@ def index():
                 verse_text = verse
                 verse_reference = ""
 
-            src = generate_image(scene, verse)
+            src = generate_image(scene, verse_text)
             image_url = download_and_watermark(src)
 
             return render_template(
