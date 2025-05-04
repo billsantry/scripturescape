@@ -93,15 +93,17 @@ NEGATIVE = (
     "logos, watermarks, UI, or any typographic element."
 )
 
-def generate_image(scene: str, size: str = "1024x1024") -> str:
+def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
+    """
+    Generate a hopeful watercolor-style image that visually reflects the user's situation
+    and the scripture message, without showing text or people.
+    """
     prompt = (
-        f"A flowing, painterly watercolor landscape of '{scene}'—"
-        f"{random.choice(WEATHERS)}, {random.choice(PALETTES)}, "
-        f"depicted from a {random.choice(VIEWPOINTS)}. "
-        "Early-morning light filtering through haze, foreground blades of grass "
-        "in gentle blur, crisp mid-ground focal point, reflective water "
-        "catching the sky. Loose wet-on-wet strokes with subtle granulation, "
-        "tranquil atmosphere. Avoid people, buildings, and man-made objects. "
+        f"A gentle and emotionally uplifting watercolor landscape, inspired by the feeling of: '{scene}', "
+        f"and the message: '{scripture}'. The scene should use nature as a metaphor to reflect hope, peace, and renewal. "
+        f"Use a soft and serene color palette like {random.choice(PALETTES)}, with natural light conditions such as "
+        f"{random.choice(WEATHERS)}. Style: loose wet-on-wet brushwork, subtle gradients, flowing organic shapes. "
+        f"Avoid any people, text, buildings, or man-made objects. "
         f"{NEGATIVE}"
     )
 
@@ -114,6 +116,7 @@ def generate_image(scene: str, size: str = "1024x1024") -> str:
     if b64:
         return f"data:image/png;base64,{b64}"
     raise RuntimeError("No usable image data returned by OpenAI.")
+
 
 # ── Download and watermark image ───────────────────────────────────────────────
 def download_and_watermark(src: str) -> str:
