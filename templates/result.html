@@ -18,7 +18,6 @@
     .poster-img-wrapper {
       position: relative;
       width: 100%;
-      animation: fadeInImage 1.5s ease-in-out;
     }
     .poster-img {
       width: 100%;
@@ -36,20 +35,18 @@
       text-align: center;
       font-style: normal;
       text-shadow: 0 1px 3px var(--bs-light);
-      opacity: 0;
-      animation: fadeInOverlay 1.5s ease-in-out 1s forwards;
     }
     .verse-overlay h4 {
       font-family: 'Dancing Script', cursive;
       font-weight: 600;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       margin-bottom: 0.5rem;
       font-style: normal;
     }
     .verse-overlay p {
       font-family: 'Dancing Script', cursive;
       font-weight: 400;
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       margin: 0;
       font-style: normal;
     }
@@ -66,7 +63,7 @@
     }
     @media (max-width: 576px) {
       .verse-overlay h4 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
       }
       .verse-overlay p {
         font-size: 1rem;
@@ -77,16 +74,8 @@
         font-size: 1.7rem;
       }
       .verse-overlay p {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
       }
-    }
-    @keyframes fadeInImage {
-      from { opacity: 0; transform: scale(1.02); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @keyframes fadeInOverlay {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
     .btn-group .btn {
       margin: 0.25rem;
@@ -138,7 +127,7 @@
     const verseText = `{{ verse_text }} - {{ verse_reference }}`;
     const cap = document.getElementById('capture-area');
 
-    document.getElementById('download-btn').addEventListener('click', () => {
+    document.getElementById('download-btn').addEventListener('click', async () => {
       setTimeout(async () => {
         const canvas = await html2canvas(cap, { backgroundColor: null });
         const link = document.createElement('a');
@@ -155,6 +144,7 @@
         try {
           const canvas = await html2canvas(cap, { backgroundColor: null });
           const b64 = canvas.toDataURL().split(',')[1];
+
           const resp = await fetch('https://api.imgur.com/3/image', {
             method: 'POST',
             headers: {
@@ -177,7 +167,7 @@
         } catch (err) {
           document.getElementById('imgur-status').textContent = 'Error preparing shareable image.';
         }
-      }, 4000); // delay to account for animation
+      }, 4000); // Delay to ensure the image fully renders
     });
   </script>
 </body>
