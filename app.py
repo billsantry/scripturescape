@@ -73,7 +73,7 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
 
     return verse, commentary
 
-# ── Image generation (DALL·E 3) ──────────────────────────────────
+# ── Image generation (DALL·E 3) ────────────────────────────────────────────────
 PALETTES = [
     "warm pastel washes",
     "cool dawn blues",
@@ -89,20 +89,36 @@ VIEWPOINTS = [
     "close-up foreground focus",
     "wide panoramic sweep",
 ]
+
 NEGATIVE = (
-    "No text, lettering, calligraphy, handwriting, signage, symbols, captions, "
-    "logos, watermarks, UI, or any typographic element."
+    "No text, no letters, no words, no writing, no calligraphy, no handwriting, no captions, "
+    "no signs, no logos, no symbols, no typographic elements, no inscriptions, no UI, no watermarks, "
+    "absolutely no readable characters of any kind."
 )
 
 def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
+    """
+    Generate a hopeful watercolor-style image that visually reflects the user's situation
+    and the scripture message, without showing text or people.
+    """
     prompt = (
-        f"A gentle and emotionally uplifting watercolor landscape, inspired by the feeling of: '{scene}', "
-        f"and the message: '{scripture}'. The scene should use nature as a metaphor to reflect hope, peace, and renewal. "
-        f"Use a soft and serene color palette like {random.choice(PALETTES)}, with natural light conditions such as "
-        f"{random.choice(WEATHERS)}. Style: loose wet-on-wet brushwork, subtle gradients, flowing organic shapes. "
-        f"Avoid any people, text, buildings, or man-made objects. "
-        f"{NEGATIVE}"
+        f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
+        f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
+        f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
+        f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
+        f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
+        f"Avoid any people, buildings, text, or man-made elements. {NEGATIVE}"
     )
+
+    resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
+    item = resp.data[0]
+    url = getattr(item, "url", None) or item.get("url")
+    if url and url.startswith("http"):
+        return url
+    b64 = getattr(item, "b64_json", None) or item.get("b64_json")
+    if b64:
+        return f"data:image/png;base64,{b64}"
+    raise RuntimeError("No usable image data returned by OpenAI.")
 
     resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
     item = resp.data[0]
