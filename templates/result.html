@@ -4,34 +4,23 @@
   <meta charset="utf-8">
   <title>ScriptureScape - Result</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Google Fonts: Roboto + Dancing Script with 600 weight -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     body {
       background-color: #f8f9fa;
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
     }
-
     .container {
       max-width: 800px;
       padding: 2rem 1rem;
     }
-
-    .poster-wrapper {
-      position: relative;
-      margin-bottom: 1rem;
-    }
-
     .poster-img {
       width: 100%;
       border-radius: 0.5rem;
+      margin-bottom: 1rem;
     }
-
     .verse-overlay {
       position: absolute;
       top: 50%;
@@ -47,33 +36,16 @@
       font-weight: 600;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
     }
-
-    .verse-overlay h4 {
-      margin-bottom: 0.5rem;
+    @media (min-width: 768px) {
+      .verse-overlay {
+        font-size: 1.875rem;
+      }
     }
-
-    .verse-overlay p {
-      margin: 0;
-      font-style: italic;
-    }
-
     .btn-group .btn {
       margin: 0.25rem;
     }
-
-    #download-btn {
-      margin: 1rem 0;
-    }
-
-    @media (max-width: 576px) {
-      .btn-group {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn-group .btn {
-        width: 100%;
-      }
+    .feedback-btn {
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -81,31 +53,30 @@
   <div class="container text-center">
     <h2 class="mb-4">God’s Word for This Moment</h2>
 
-    <div class="poster-wrapper">
+    <div id="verse-card" class="position-relative">
       <img src="{{ image_url }}" alt="Watercolor Verse Poster" class="poster-img">
       <div class="verse-overlay">
-        <h4>{{ verse_text }}</h4>
-        <p>{{ verse_reference }}</p>
+        {{ verse_text }}<br>
+        <small><em>{{ verse_reference }}</em></small>
       </div>
     </div>
 
-    <p class="mt-4">{{ commentary }}</p>
-
-    <a href="{{ image_url }}" download class="btn btn-success" id="download-btn">Download as PNG</a>
+    <a href="#" class="btn btn-success" id="download-btn">Download as PNG</a>
 
     <p><strong>Ready to share!</strong></p>
     <div class="btn-group d-flex justify-content-center flex-wrap">
-      <a href="#" class="btn btn-primary">Share on Facebook</a>
-      <a href="#" class="btn btn-info text-white">Share on X</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="btn btn-primary">Share on Facebook</a>
+      <a href="https://twitter.com/intent/tweet?text={{ verse_text }}%20%E2%80%94%20{{ verse_reference }}&url={{ request.url }}" target="_blank" class="btn btn-info text-white">Share on X</a>
       <a href="mailto:?subject=ScriptureScape&body={{ image_url }}" class="btn btn-secondary">Share via Email</a>
     </div>
+
+    <p class="mt-4">{{ commentary }}</p>
 
     <form action="/" method="get">
       <button type="submit" class="btn btn-outline-secondary mt-4">Try another scenario</button>
     </form>
 
-    <!-- Feedback Link -->
-    <div class="mt-5">
+    <div class="feedback-btn">
       <a href="mailto:billsantry@gmail.com?subject=ScriptureScape%20Feedback" class="btn btn-outline-dark">
         💬 Report Comments, Compliments or Bugs
       </a>
@@ -113,5 +84,15 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('download-btn').addEventListener('click', function () {
+      html2canvas(document.querySelector('#verse-card')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'scripturescape.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
 </body>
 </html>

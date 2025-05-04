@@ -9,7 +9,7 @@ import openai
 from flask import Flask, render_template, request, url_for, flash, redirect
 from PIL import Image, ImageDraw, ImageFont
 
-# ── Setup ──────────────────────────────────────────────────────────────────────
+# ── Setup ──────────────────────────────────────────────────
 BASE_DIR = os.path.dirname(__file__)
 load_dotenv(os.path.join(BASE_DIR, "config.env.txt"))
 
@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 IMGUR_CLIENT_ID = os.getenv("IMGUR_CLIENT_ID")
 
-# ── Scripture generation (GPT-4o) ──────────────────────────────────────────────
+# ── Scripture generation (GPT-4o) ────────────────────────────────────
+
 def generate_scripture(prompt: str) -> tuple[str, str]:
     if not prompt:
         raise ValueError("Please describe your situation to receive a verse.")
@@ -72,7 +73,7 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
 
     return verse, commentary
 
-# ── Image generation (DALL·E 3) ────────────────────────────────────────────────
+# ── Image generation (DALL·E 3) ──────────────────────────────────
 PALETTES = [
     "warm pastel washes",
     "cool dawn blues",
@@ -94,10 +95,6 @@ NEGATIVE = (
 )
 
 def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
-    """
-    Generate a hopeful watercolor-style image that visually reflects the user's situation
-    and the scripture message, without showing text or people.
-    """
     prompt = (
         f"A gentle and emotionally uplifting watercolor landscape, inspired by the feeling of: '{scene}', "
         f"and the message: '{scripture}'. The scene should use nature as a metaphor to reflect hope, peace, and renewal. "
@@ -117,8 +114,8 @@ def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
         return f"data:image/png;base64,{b64}"
     raise RuntimeError("No usable image data returned by OpenAI.")
 
+# ── Download and watermark image ──────────────────────────────
 
-# ── Download and watermark image ───────────────────────────────────────────────
 def download_and_watermark(src: str) -> str:
     static_dir = os.path.join(BASE_DIR, "static")
     os.makedirs(static_dir, exist_ok=True)
@@ -154,7 +151,8 @@ def download_and_watermark(src: str) -> str:
     combined.save(final_path, "PNG")
     return url_for("static", filename="image.png")
 
-# ── Flask route ────────────────────────────────────────────────────────────────
+# ── Flask route ────────────────────────────────────
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -162,14 +160,13 @@ def index():
         try:
             verse, commentary = generate_scripture(scene)
 
-            # Split verse into main text and reference using em dash
             if "—" in verse:
                 verse_text, verse_reference = map(str.strip, verse.split("—", 1))
             else:
                 verse_text = verse
                 verse_reference = ""
 
-            src = generate_image(scene, verse_text)
+            src = generate_image(scene, verse)
             image_url = download_and_watermark(src)
 
             return render_template(
@@ -179,6 +176,7 @@ def index():
                 commentary=commentary,
                 image_url=image_url,
                 imgur_client_id=IMGUR_CLIENT_ID,
+                request_url=request.url
             )
         except Exception as e:
             logger.error("Error generating ScriptureScape", exc_info=True)
@@ -186,6 +184,7 @@ def index():
             return redirect(url_for("index"))
     return render_template("index.html")
 
-# ── Run Dev Server ─────────────────────────────────────────────────────────────
+# ── Run Dev Server ─────────────────────────────────
+
 if __name__ == "__main__":
-    app.run(debug=True)   
+    app.run(debug=True)
