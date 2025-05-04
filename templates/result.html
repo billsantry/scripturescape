@@ -64,6 +64,14 @@
         font-size: 1.5rem;
       }
     }
+    @media (max-width: 576px) {
+      .verse-overlay h4 {
+        font-size: 1.1rem;
+      }
+      .verse-overlay p {
+        font-size: 0.8rem;
+      }
+    }
     @keyframes fadeInImage {
       from { opacity: 0; transform: scale(1.02); }
       to { opacity: 1; transform: scale(1); }
@@ -123,42 +131,46 @@
     const cap = document.getElementById('capture-area');
 
     document.getElementById('download-btn').addEventListener('click', async () => {
-      const canvas = await html2canvas(cap, { backgroundColor: null });
-      const link = document.createElement('a');
-      link.download = 'scripturescape.png';
-      link.href = canvas.toDataURL();
-      document.body.append(link);
-      link.click();
-      link.remove();
+      setTimeout(async () => {
+        const canvas = await html2canvas(cap, { backgroundColor: null });
+        const link = document.createElement('a');
+        link.download = 'scripturescape.png';
+        link.href = canvas.toDataURL();
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }, 2000);
     });
 
-    window.addEventListener('load', async () => {
-      try {
-        const canvas = await html2canvas(cap, { backgroundColor: null });
-        const b64 = canvas.toDataURL().split(',')[1];
+    window.addEventListener('load', () => {
+      setTimeout(async () => {
+        try {
+          const canvas = await html2canvas(cap, { backgroundColor: null });
+          const b64 = canvas.toDataURL().split(',')[1];
 
-        const resp = await fetch('https://api.imgur.com/3/image', {
-          method: 'POST',
-          headers: {
-            Authorization: 'Client-ID ' + IMGUR_CLIENT_ID,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ image: b64, type: 'base64' })
-        });
+          const resp = await fetch('https://api.imgur.com/3/image', {
+            method: 'POST',
+            headers: {
+              Authorization: 'Client-ID ' + IMGUR_CLIENT_ID,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: b64, type: 'base64' })
+          });
 
-        const j = await resp.json();
-        if (j.success) {
-          const u = encodeURIComponent(j.data.link);
-          document.getElementById('imgur-status').textContent = 'Ready to share!';
-          document.getElementById('fb-share').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-          document.getElementById('tw-share').href = `https://twitter.com/intent/tweet?url=${u}&text=${encodeURIComponent(verseText)}`;
-          document.getElementById('email-share').href = `mailto:?subject=Your ScriptureScape&body=${encodeURIComponent(verseText)}%0A${u}`;
-        } else {
-          document.getElementById('imgur-status').textContent = 'Upload failed.';
+          const j = await resp.json();
+          if (j.success) {
+            const u = encodeURIComponent(j.data.link);
+            document.getElementById('imgur-status').textContent = 'Ready to share!';
+            document.getElementById('fb-share').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+            document.getElementById('tw-share').href = `https://twitter.com/intent/tweet?url=${u}&text=${encodeURIComponent(verseText)}`;
+            document.getElementById('email-share').href = `mailto:?subject=Your ScriptureScape&body=${encodeURIComponent(verseText)}%0A${u}`;
+          } else {
+            document.getElementById('imgur-status').textContent = 'Upload failed.';
+          }
+        } catch (err) {
+          document.getElementById('imgur-status').textContent = 'Error preparing shareable image.';
         }
-      } catch (err) {
-        document.getElementById('imgur-status').textContent = 'Error preparing shareable image.';
-      }
+      }, 2000);
     });
   </script>
 </body>
