@@ -1,3 +1,4 @@
+# Trigger redeploy - no logic change
 name: Deploy ScriptureScape to Azure
 
 on:
