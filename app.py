@@ -24,10 +24,6 @@ IMGUR_CLIENT_ID = os.getenv("IMGUR_CLIENT_ID")
 
 # ── Scripture generation (GPT-4o) ──────────────────────────────────────────────
 def generate_scripture(prompt: str) -> tuple[str, str]:
-    """
-    Given a short description of the user’s challenge, return
-    (full_verse_with_reference, 2–3-sentence_commentary).
-    """
     if not prompt:
         raise ValueError("Please describe your situation to receive a verse.")
 
@@ -49,12 +45,10 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
     )
     text = resp.choices[0].message.content.strip()
 
-    # Strip optional ```json code fences
     if text.startswith("```") and text.endswith("```"):
         lines = text.splitlines()
         text = "\n".join(lines[1:-1]).strip()
 
-    # Attempt JSON parse
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
@@ -71,7 +65,6 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
     verse = data.get("scripture_text", "").strip()
     commentary = data.get("commentary", "").strip()
 
-    # Fallback: naive split
     if not verse:
         parts = text.split("\n", 1)
         verse = parts[0].strip()
@@ -79,7 +72,7 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
 
     return verse, commentary
 
-# ── Image generation (DALL·E 3, watercolor pastoral) ──────────────────────────
+# ── Image generation (DALL·E 3) ────────────────────────────────────────────────
 PALETTES = [
     "warm pastel washes",
     "cool dawn blues",
@@ -101,11 +94,6 @@ NEGATIVE = (
 )
 
 def generate_image(scene: str, size: str = "1024x1024") -> str:
-    """
-    Return a DALL·E 3 watercolor landscape URL (or base64 URI) for `scene`,
-    varying palette, weather, and viewpoint each call while guaranteeing
-    zero typography.
-    """
     prompt = (
         f"A flowing, painterly watercolor landscape of '{scene}'—"
         f"{random.choice(WEATHERS)}, {random.choice(PALETTES)}, "
@@ -127,13 +115,12 @@ def generate_image(scene: str, size: str = "1024x1024") -> str:
         return f"data:image/png;base64,{b64}"
     raise RuntimeError("No usable image data returned by OpenAI.")
 
-# ── Download, watermark, and serve image ──────────────────────────────────────
+# ── Download and watermark image ───────────────────────────────────────────────
 def download_and_watermark(src: str) -> str:
     static_dir = os.path.join(BASE_DIR, "static")
     os.makedirs(static_dir, exist_ok=True)
     raw_path = os.path.join(static_dir, "raw.png")
 
-    # Download or decode
     if src.startswith("http"):
         r = requests.get(src)
         r.raise_for_status()
@@ -144,10 +131,10 @@ def download_and_watermark(src: str) -> str:
     with open(raw_path, "wb") as f:
         f.write(data)
 
-    # Add watermark
     img = Image.open(raw_path).convert("RGBA")
     overlay = Image.new("RGBA", img.size, (255, 255, 255, 0))
     draw = ImageDraw.Draw(overlay)
+
     try:
         font = ImageFont.truetype(os.path.join(BASE_DIR, "fonts", "arial.ttf"), 20)
     except IOError:
@@ -164,18 +151,28 @@ def download_and_watermark(src: str) -> str:
     combined.save(final_path, "PNG")
     return url_for("static", filename="image.png")
 
-# ── Flask routes ──────────────────────────────────────────────────────────────
+# ── Flask route ────────────────────────────────────────────────────────────────
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         scene = request.form.get("scene", "").strip()
         try:
             verse, commentary = generate_scripture(scene)
+
+            # Split verse into main text and reference using em dash
+            if "—" in verse:
+                verse_text, verse_reference = map(str.strip, verse.split("—", 1))
+            else:
+                verse_text = verse
+                verse_reference = ""
+
             src = generate_image(scene)
             image_url = download_and_watermark(src)
+
             return render_template(
                 "result.html",
-                verse=verse,
+                verse_text=verse_text,
+                verse_reference=verse_reference,
                 commentary=commentary,
                 image_url=image_url,
                 imgur_client_id=IMGUR_CLIENT_ID,
@@ -186,6 +183,6 @@ def index():
             return redirect(url_for("index"))
     return render_template("index.html")
 
-# ── Run local dev server ──────────────────────────────────────────────────────
+# ── Run Dev Server ─────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     app.run(debug=True)
