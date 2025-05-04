@@ -12,13 +12,13 @@
       font-family: 'Roboto', Helvetica, Arial, sans-serif;
     }
     .container {
-      max-width: 800px;
+      max-width: 900px;
       padding: 2rem 1rem;
     }
     .poster-img-wrapper {
       position: relative;
       width: 100%;
-      animation: fadeInImage 2s ease-in-out;
+      animation: fadeInImage 1.5s ease-in-out;
     }
     .poster-img {
       width: 100%;
@@ -37,7 +37,7 @@
       font-style: normal;
       text-shadow: 0 1px 3px var(--bs-light);
       opacity: 0;
-      animation: fadeInOverlay 2s ease-in-out 2s forwards;
+      animation: fadeInOverlay 1.5s ease-in-out 1s forwards;
     }
     .verse-overlay h4 {
       font-family: 'Dancing Script', cursive;
@@ -58,18 +58,26 @@
         width: 70%;
       }
       .verse-overlay h4 {
-        font-size: 2.2rem;
+        font-size: 2rem;
       }
       .verse-overlay p {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
       }
     }
     @media (max-width: 576px) {
       .verse-overlay h4 {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
       }
       .verse-overlay p {
-        font-size: 0.8rem;
+        font-size: 1rem;
+      }
+    }
+    @media (min-width: 576px) and (max-width: 767.98px) {
+      .verse-overlay h4 {
+        font-size: 1.7rem;
+      }
+      .verse-overlay p {
+        font-size: 1.1rem;
       }
     }
     @keyframes fadeInImage {
@@ -139,7 +147,7 @@
         document.body.append(link);
         link.click();
         link.remove();
-      }, 2000);
+      }, 3000);
     });
 
     window.addEventListener('load', () => {
@@ -170,7 +178,7 @@
         } catch (err) {
           document.getElementById('imgur-status').textContent = 'Error preparing shareable image.';
         }
-      }, 2000);
+      }, 3000);
     });
   </script>
 </body>
