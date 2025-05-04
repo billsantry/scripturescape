@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 📜 ScriptureScape
 
 ![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-blueviolet)
