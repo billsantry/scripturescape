@@ -98,29 +98,24 @@ NEGATIVE = (
 
 def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
     """
-    Generate a hopeful watercolor-style image that visually reflects the user's situation
-    and the scripture message, without showing text or people.
+    Generate a peaceful watercolor-style image that reflects the user's situation
+    and the scripture message — with no people, text, or man-made elements.
     """
     prompt = (
-        f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
-        f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
-        f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
-        f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
-        f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
-        f"Avoid any people, buildings, text, or man-made elements. {NEGATIVE}"
+        f"A serene watercolor painting capturing the emotional tone of: '{scene}', "
+        f"inspired by the spiritual message: '{scripture}'. Use natural imagery like landscapes, skies, "
+        f"paths, light, and weather to evoke peace, grace, and hope. Focus on organic scenery: trees, clouds, rivers, hills, or sunbeams. "
+        f"Do NOT include any writing, letters, text, words, calligraphy, inscriptions, symbols, signage, or typographic elements of any kind. "
+        f"Absolutely NO readable or semi-readable characters. No man-made objects. Use flowing wet-on-wet watercolor style with soft gradients and light textures."
     )
 
-    resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
-    item = resp.data[0]
-    url = getattr(item, "url", None) or item.get("url")
-    if url and url.startswith("http"):
-        return url
-    b64 = getattr(item, "b64_json", None) or item.get("b64_json")
-    if b64:
-        return f"data:image/png;base64,{b64}"
-    raise RuntimeError("No usable image data returned by OpenAI.")
-
-    resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
+    resp = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        n=1,
+        size=size
+    )
+    
     item = resp.data[0]
     url = getattr(item, "url", None) or item.get("url")
     if url and url.startswith("http"):
