@@ -81,7 +81,7 @@ PALETTES = [
     "autumnal ambers",
     "twilight lavenders",
 ]
-WEATHERS = ["sun-kissed", "misty", "golden-hour", "overcast", "after-rain"]
+WEATHERS = ["sun-kissed", "misty", "golden-hour", "overcast", "after-rain", "early morning"]
 VIEWPOINTS = [
     "bird’s-eye view",
     "low-angled vantage",
@@ -91,10 +91,12 @@ VIEWPOINTS = [
 ]
 
 NEGATIVE = (
-    "No text, no letters, no words, no writing, no calligraphy, no handwriting, no captions, "
-    "no signs, no logos, no symbols, no typographic elements, no inscriptions, no UI, no watermarks, "
-    "absolutely no readable characters of any kind."
+    "Do not include people, humans, faces, silhouettes, shadows, figures, crowds, or human forms. "
+    "No text, no letters, no words, no writing, no calligraphy, no handwriting, no captions. "
+    "No signs, no logos, no symbols, no typographic elements, no inscriptions, no UI, no watermarks. "
+    "Absolutely no readable characters or human representations of any kind."
 )
+
 
 def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
     """
@@ -102,13 +104,14 @@ def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
     and the scripture message, without showing text or people.
     """
     prompt = (
-        f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
-        f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
-        f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
-        f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
-        f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
-        f"Avoid any people, buildings, text, or man-made elements. {NEGATIVE}"
-    )
+    f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
+    f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
+    f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
+    f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
+    f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
+    f"{NEGATIVE}"
+)
+
 
     resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
     item = resp.data[0]
