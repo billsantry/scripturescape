@@ -34,17 +34,29 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
             {
                 "role": "system",
                 "content": (
-                    "You are an insightful Bible scholar. Given a challenging situation, "
-                    "choose a less-common verse that brings hope. Return a JSON object "
-                    "with keys 'scripture_text' (full verse+ref) and 'commentary' (2–3 sentences)."
+                    "You are a thoughtful and creative Bible scholar. "
+                    "Given a person's emotional or situational challenge, "
+                    "select a scriptural verse that is appropriate but unexpected — "
+                    "something less commonly quoted, unless a popular verse offers unique relevance. "
+                    "Avoid repetition of the same verses across similar prompts. "
+                    "Avoid embellishing or adding any text outside the verse itself. "
+                    "Your goal is to offer surprising comfort rooted in biblical truth.\n\n"
+                    "Return only a JSON object with the following keys:\n"
+                    "- 'scripture_text': the full verse and reference, with nothing added.\n"
+                    "- 'commentary': 2–3 sentences that connect the verse to the user's situation.\n\n"
+                    "Never include introductory phrases, markdown formatting, or extra symbols."
                 ),
             },
             {"role": "user", "content": prompt},
         ],
-        temperature=0.8,
-        max_tokens=200,
+        temperature=0.9,
+        max_tokens=250,
     )
+
     text = resp.choices[0].message.content.strip()
+
+    # Optional debug logging
+    # print("Raw model response:\n", text)
 
     if text.startswith("```") and text.endswith("```"):
         lines = text.splitlines()
@@ -66,14 +78,23 @@ def generate_scripture(prompt: str) -> tuple[str, str]:
     verse = data.get("scripture_text", "").strip()
     commentary = data.get("commentary", "").strip()
 
-    if not verse:
+    # 🔒 Additional fallback in case of malformed response
+    if not verse or verse == "{" or verse.startswith("{"):
+        print("⚠️ Invalid or missing scripture_text — using fallback.")
         parts = text.split("\n", 1)
         verse = parts[0].strip()
         commentary = parts[1].strip() if len(parts) > 1 else ""
 
+        # Still invalid? Show placeholder
+        if not verse or verse == "{" or len(verse) < 10:
+            verse = "Scripture not available right now. Please try again."
+            commentary = ""
+
     return verse, commentary
 
+
 # ── Image generation (DALL·E 3) ────────────────────────────────────────────────
+
 PALETTES = [
     "warm pastel washes",
     "cool dawn blues",
@@ -81,7 +102,16 @@ PALETTES = [
     "autumnal ambers",
     "twilight lavenders",
 ]
-WEATHERS = ["sun-kissed", "misty", "golden-hour", "overcast", "after-rain", "early morning"]
+
+WEATHERS = [
+    "sun-kissed",
+    "misty",
+    "golden-hour",
+    "overcast",
+    "after-rain",
+    "early morning",
+]
+
 VIEWPOINTS = [
     "bird’s-eye view",
     "low-angled vantage",
@@ -92,26 +122,28 @@ VIEWPOINTS = [
 
 NEGATIVE = (
     "Do not include people, humans, faces, silhouettes, shadows, figures, crowds, or human forms. "
-    "No text, no letters, no words, no writing, no calligraphy, no handwriting, no captions. "
-    "No signs, no logos, no symbols, no typographic elements, no inscriptions, no UI, no watermarks. "
-    "Absolutely no readable characters or human representations of any kind."
+    "Do not include any form of text, writing, letters, numbers, symbols, or typographic marks. "
+    "No readable content, no inscriptions, no watermarks, no logos, no UI elements. "
+    "This is a text-free image. The artwork must not contain any language or writing in any form."
 )
-
 
 def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
     """
     Generate a hopeful watercolor-style image that visually reflects the user's situation
     and the scripture message, without showing text or people.
     """
-    prompt = (
-    f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
-    f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
-    f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
-    f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
-    f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
-    f"{NEGATIVE}"
-)
 
+    prompt = (
+        f"A serene, emotionally uplifting watercolor painting inspired by the feeling of: '{scene}', "
+        f"and the scripture: '{scripture}'. Use nature to symbolically reflect hope, peace, and renewal. "
+        f"Favor a poetic composition with soft brushstrokes, luminous light, and harmonious colors — "
+        f"perhaps a tranquil landscape, a path through morning mist, or a quiet place touched by grace. "
+        f"Style: flowing wet-on-wet technique, gentle gradients, natural textures, and impressionistic detail. "
+        f"{NEGATIVE}"
+    )
+
+    # ✨ Reinforce visual-only output
+    prompt += " Clarity is visual, not textual. No written or readable elements should appear."
 
     resp = client.images.generate(model="dall-e-3", prompt=prompt, n=1, size=size)
     item = resp.data[0]
@@ -122,6 +154,7 @@ def generate_image(scene: str, scripture: str, size: str = "1024x1024") -> str:
     if b64:
         return f"data:image/png;base64,{b64}"
     raise RuntimeError("No usable image data returned by OpenAI.")
+
 
 # ── Download and watermark image ──────────────────────────────
 
